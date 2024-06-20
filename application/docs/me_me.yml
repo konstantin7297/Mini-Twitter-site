@@ -1,0 +1,56 @@
+Endpoint для получения информации о себе.
+---
+tags:
+  - users
+get:
+  parameters:
+    - name: api-key
+      in: header
+      type: string
+      required: true
+      description: Ключ авторизации пользователя.
+definitions:
+  UserInfo:
+    type: object
+    properties:
+      result:
+        type: boolean
+      user:
+        type: object
+        schema:
+          $ref: '#/definitions/User'
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      followers:
+        type: array
+      following:
+        type: array
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  200:
+    description: Возвращает информацию о пользователе.
+    schema:
+      $ref: '#/definitions/UserInfo'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Возвращает информацию об операции при ошибке авторизации.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'

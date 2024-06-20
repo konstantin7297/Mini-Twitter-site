@@ -1,0 +1,51 @@
+Endpoint для создания нового твита.
+---
+tags:
+  - tweets
+post:
+  parameters:
+    - name: api-key
+      in: header
+      type: string
+      required: true
+      description: Ключ для авторизации пользователя.
+    - name: data
+      in: body
+      type: object
+      required: true
+      description: Содержимое твита для добавления в БД.
+      schema:
+        $ref: '#/definitions/TweetsPostForm'
+definitions:
+  Post:
+    type: object
+    properties:
+      result:
+        type: boolean
+      tweet_id:
+        type: integer
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  201:
+    description: Возвращает при успешном создании твита при POST запросе.
+    type: object
+    schema:
+      $ref: '#/definitions/Post'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Возвращает информацию об операции при ошибке авторизации.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'

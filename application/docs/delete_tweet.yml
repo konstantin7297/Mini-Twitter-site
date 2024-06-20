@@ -1,0 +1,48 @@
+Endpoint для удаления твитов пользователя.
+---
+tags:
+  - tweets
+delete:
+  parameters:
+    - name: api-key
+      in: header
+      type: string
+      required: true
+      description: Ключ для авторизации пользователя.
+    - name: tweet_id
+      in: path
+      type: integer
+      required: true
+      description: Id твита для удаления пользователем.
+      schema:
+        $ref: '#/definitions/IdForm'
+definitions:
+  Delete:
+    type: object
+    properties:
+      result:
+        type: boolean
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  200:
+    description: Возвращает статус операции при успешном удалении твита.
+    schema:
+      $ref: '#/definitions/Delete'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Возвращает информацию об операции при ошибке авторизации.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'

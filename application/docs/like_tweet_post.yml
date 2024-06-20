@@ -1,0 +1,48 @@
+Endpoint для установки лайков на твиты.
+---
+tags:
+  - tweets
+post:
+  parameters:
+    - name: api-key
+      in: header
+      type: string
+      required: true
+      description: Ключ для авторизации пользователя.
+    - name: tweet_id
+      in: path
+      type: int
+      required: true
+      description: Id твита для установки лайка.
+      schema:
+        $ref: '#/definitions/IdForm'
+definitions:
+  Response:
+    type: object
+    properties:
+      result:
+        type: boolean
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  200:
+    description: Возвращает статус операции при успешной установке лайка.
+    schema:
+      $ref: '#/definitions/Response'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Возвращает информацию об операции при ошибке авторизации.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'

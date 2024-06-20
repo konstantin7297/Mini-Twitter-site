@@ -1,0 +1,58 @@
+Endpoint получения списка твитов пользователя.
+---
+tags:
+  - tweets
+get:
+  parameters:
+    - name: api-key
+      in: header
+      type: string
+      required: true
+      description: Ключ для авторизации пользователя.
+definitions:
+  TweetsGet:
+    type: object
+    properties:
+      result:
+        type: boolean
+      tweets:
+        type: object
+        schema:
+          $ref: '#/definitions/Tweet'
+  Tweet:
+    type: object
+    properties:
+      id:
+        type: integer
+      content:
+        type: string
+      attachments:
+        type: array
+      author:
+        type: object
+      likes:
+        type: array
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  200:
+    description: Возвращает список твитов пользователя при GET запросе.
+    schema:
+      $ref: '#/definitions/TweetsGet'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Возвращает информацию об операции при ошибке авторизации.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'

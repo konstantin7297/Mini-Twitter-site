@@ -1,0 +1,61 @@
+version: '3.9'
+
+networks:
+  front-end:
+    driver: bridge
+  back-end:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d db -U admin"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      - back-end
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./database/:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: ./application
+      dockerfile: Dockerfile
+    stop_signal: SIGKILL
+    links:
+      - postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    networks:
+      - back-end
+      - front-end
+    ports:
+      - '5000:5000'
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    stop_signal: SIGKILL
+    links:
+      - postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    networks:
+      - front-end
+    ports:
+      - "8080:80"
+      - "8443:443"

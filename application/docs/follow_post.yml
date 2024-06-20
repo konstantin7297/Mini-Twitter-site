@@ -1,0 +1,48 @@
+Endpoint для подписки на пользователей.
+---
+tags:
+  - users
+post:
+  parameters:
+    - name: api-key
+      in: header
+      type: string
+      required: true
+      description: Ключ для авторизации пользователя.
+    - name: user_id
+      in: path
+      type: int
+      required: true
+      description: Id пользователя для подписки на него.
+      schema:
+        $ref: '#/definitions/IdForm'
+definitions:
+  Response:
+    type: object
+    properties:
+      result:
+        type: boolean
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  200:
+    description: Возвращает статус операции при успешной подписке на пользователя.
+    schema:
+      $ref: '#/definitions/Response'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Возвращает информацию об операции при ошибке авторизации.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'

@@ -1,0 +1,41 @@
+Endpoint для загрузки изображений пользователей.
+---
+tags:
+  - medias
+post:
+  parameters:
+    - name: file
+      in: form-data
+      type: file
+      required: true
+      description: Отправленный пользователем файл.
+      schema:
+        $ref: '#/definitions/MediasPostForm'
+definitions:
+  Media:
+    type: object
+    properties:
+      result:
+        type: boolean
+      media_id:
+        type: integer
+  Error:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_type:
+        type: string
+      error_message:
+        type: string
+responses:
+  201:
+    description: Возвращает при успешной загрузке файла.
+    type: object
+    schema:
+      $ref: '#/definitions/Media'
+  400:
+    description: Возвращает информацию об операции при ошибке.
+    type: object
+    schema:
+      $ref: '#/definitions/Error'
