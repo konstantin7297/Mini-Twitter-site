@@ -4,6 +4,8 @@ RUN apt-get update && apt-get install -y python3-dev && rm -rf /var/lib/apt/list
 
 COPY . /server/application
 
+RUN mkdir /server/application/images
+
 RUN pip install -r /server/application/requirements.txt
 
 WORKDIR /server

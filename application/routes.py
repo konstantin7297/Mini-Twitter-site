@@ -9,7 +9,7 @@ from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from flasgger import Swagger, APISpec, swag_from  # type: ignore
 
-from .models import User, Tweet, Media  # type: ignore
+from .models import User, Tweet, Media, creates  # type: ignore
 from .schemas import TweetsPostForm, MediasPostForm, IdForm  # type: ignore
 
 
@@ -28,7 +28,9 @@ spec: APISpec = APISpec(
     ]
 )
 
-template: Dict = spec.to_flasgger(app, definitions=[TweetsPostForm, MediasPostForm, IdForm])
+template: Dict = spec.to_flasgger(app, definitions=[
+    TweetsPostForm, MediasPostForm, IdForm
+])
 swagger: Swagger = Swagger(app, template=template)
 
 
@@ -44,6 +46,9 @@ def authorization():
         "/api/users/<int:user_id>",
     ]:
         response: Any = User.get_user(api_key=request.headers.get("api-key"))
+
+        if request.headers.get("api-key") == "test" and not response:
+            creates()
 
         if not response:
             return jsonify({

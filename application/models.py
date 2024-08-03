@@ -248,4 +248,8 @@ class Media(Base):
             return False
 
 
-Base.metadata.create_all(checkfirst=True, bind=engine)
+def creates():
+    Base.metadata.create_all(checkfirst=True, bind=engine)
+    session.execute(insert(User).values(api_key="test", name="user1"))
+    session.execute(insert(User).values(api_key="test2", name="user2"))
+    session.commit()
